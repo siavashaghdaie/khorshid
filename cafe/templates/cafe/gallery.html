@@ -1,0 +1,392 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+<br><br><br>
+<style>
+  .price{
+    background-color: rgba(0,0,0,0.2);
+    margin-bottom: 10px;
+    display: flex;
+    padding:5px;
+    justify-content: left;
+    border-radius: 5px;
+
+  }
+
+  .title{
+    background-color: rgba(0,0,0,0.2);
+    backdrop-filter: blur(5px);
+    margin:0;
+    padding:20px;
+    color:wheat;
+  }
+
+  .avatarframe{
+    position:absolute;
+    display: flex;
+    justify-content: center;
+    background-color: rgba(102, 67, 11, 0.8);
+    backdrop-filter: blur(5px);
+    height:12%;
+    width:25%;
+    overflow: hidden;
+    margin:0;
+    margin-left:20px;
+    top:0%;
+    left:7%;
+    z-index: 1;
+    border-radius: 0 0 50% 50%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0
+  }
+  .artistavatar{
+    position: relative;
+    height:100%;
+    z-index: 1;
+  }
+
+  .mainimage{
+    position: relative;
+    margin-top: 8px;
+    height :60%;
+    width:auto;
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(100, 63, 4, 0.7);
+    padding:10px;
+  }
+  .card-img-top{
+    width: 100%;
+    height:auto;
+  }
+
+  .des{
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ellipsis:after{
+    content:'...';
+  }
+ 
+  
+</style>
+
+
+<div class="row col-12 justify-content-center m-0 p-0" >
+    {% if request.user.is_authenticated %}
+    <a href="{%url 'artist_add' %}" class="btn btn-success ">افزودن هنرمند</a>
+    <hr>
+    <a href="{%url 'artwork_add' %}" class="btn btn-success ">افزودن اثر</a>
+    {% endif %}
+    {% if painting %}
+    <div class="title col-12" id='painting'>
+      <br>
+        <h3>
+          نقاشی:
+          
+        </h3>
+      <hr>
+    </div>
+    {% endif %}
+    {% for product in shop %}
+      {% if product.product_type == 'one'%}
+        {% if product.section == 'painting' %}
+          <div class="card m-2" style="width: 18rem;" dir="rtl">
+              <div class="avatarframe">
+                <a href="{%url 'product' product.id%}">
+                  <img src="{{product.artist.avatar.url}}" class="artistavatar "  alt="artist avatar">
+                </a>
+              </div>
+              <div class="mainimage">
+                <img class="card-img-top" src="{{product.pic1.url}}" alt="Card image cap">
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">{{product.name}}</h5>
+                <p class="card-text">آفریننده: {{product.artist}}</p>
+                <p class="card-text des">{{product.des}}</p>
+                
+                <div class="price">
+                  {{product.price}} تومان
+                  
+                </div>
+                <a href="{%url 'product' product.id %}" class="btn btn-primary ">دیدن</a>
+                {%if request.user.is_authenticated%}
+                  <a href="{%url 'product_modify' product.id %}" class="btn btn-success ">ویرایش</a>
+                  <a href="{%url 'product_delete' product.id %}" class="btn btn-danger ">حذف</a>
+                {%endif%}
+              </div>
+          </div>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+    <br><br>
+
+    {% if writing %}
+    <div class="title col-12" id='painting'>
+      <br>
+        <h3>
+          خط:
+          
+        </h3>
+      <hr>
+    </div>
+    {% endif %}
+    {% for product in shop %}
+      {% if product.product_type == 'one'%}
+        {% if product.section == 'writing' %}
+        
+          <div class="card m-2" style="width: 18rem;" dir="rtl">
+              <div class="avatarframe">
+                <a href="{%url 'product' product.id%}">
+                  <img src="{{product.artist.avatar.url}}" class="artistavatar "  alt="artist avatar">
+                </a>
+              </div>
+              <div class="mainimage">
+                <img class="card-img-top" src="{{product.pic1.url}}" alt="Card image cap">
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">{{product.name}}</h5>
+                <p class="card-text">آفریننده: {{product.artist}}</p>
+                <p class="card-text des">{{product.des}}</p>
+                
+                <div class="price">
+                  {{product.price}} تومان
+                  
+                </div>
+                <a href="{%url 'product' product.id %}" class="btn btn-primary ">دیدن</a>
+                {%if request.user.is_authenticated%}
+                  <a href="{%url 'product_modify' product.id %}" class="btn btn-success ">ویرایش</a>
+                  <a href="{%url 'product_delete' product.id %}" class="btn btn-danger ">حذف</a>
+                {%endif%}
+              </div>
+          </div>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+    <br><br>
+
+‍    {% if sculpture %}
+      <div class="title col-12" id='painting'>
+        <br>
+          <h3>
+            حجم:
+            
+          </h3>
+        <hr>
+      </div>
+    {% endif %}
+    {% for product in shop %}
+      {% if product.product_type == 'one'%}
+        {% if product.section == 'sculpture' %}
+          <div class="card m-2" style="width: 18rem;" dir="rtl">
+              <div class="avatarframe">
+                <a href="{%url 'product' product.id%}">
+                  <img src="{{product.artist.avatar.url}}" class="artistavatar "  alt="artist avatar">
+                </a>
+              </div>
+              <div class="mainimage">
+                <img class="card-img-top" src="{{product.pic1.url}}" alt="Card image cap">
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">{{product.name}}</h5>
+                <p class="card-text">آفریننده: {{product.artist}}</p>
+                <p class="card-text des">{{product.des}}</p>
+                
+                <div class="price">
+                  {{product.price}} تومان
+                  
+                </div>
+                <a href="{%url 'product' product.id %}" class="btn btn-primary ">دیدن</a>
+                {%if request.user.is_authenticated%}
+                  <a href="{%url 'product_modify' product.id %}" class="btn btn-success ">ویرایش</a>
+                  <a href="{%url 'product_delete' product.id %}" class="btn btn-danger ">حذف</a>
+                {%endif%}
+              </div>
+          </div>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+    <br><br>
+
+    {% if photography %}
+      <div class="title col-12" id='painting'>
+        <br>
+          <h3>
+            عکس:  
+          </h3>
+        <hr>
+      </div>
+    {% endif %}     
+    {% for product in shop %}
+      {% if product.product_type == 'one'%}
+        {% if product.section == 'photography' %}
+          <div class="card m-2" style="width: 18rem;" dir="rtl">
+              <div class="avatarframe">
+                <a href="{%url 'product' product.id%}">
+                  <img src="{{product.artist.avatar.url}}" class="artistavatar "  alt="artist avatar">
+                </a>
+              </div>
+              <div class="mainimage">
+                <img class="card-img-top" src="{{product.pic1.url}}" alt="Card image cap">
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">{{product.name}}</h5>
+                <p class="card-text">آفریننده: {{product.artist}}</p>
+                <p class="card-text des">{{product.des}}</p>
+                
+                <div class="price">
+                  {{product.price}} تومان
+                  
+                </div>
+                <a href="{%url 'product' product.id %}" class="btn btn-primary ">دیدن</a>
+                {%if request.user.is_authenticated%}
+                  <a href="{%url 'product_modify' product.id %}" class="btn btn-success ">ویرایش</a>
+                  <a href="{%url 'product_delete' product.id %}" class="btn btn-danger ">حذف</a>
+                {%endif%}
+              </div>
+          </div>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+    <br><br>
+
+    {% if mosaic %}
+      <div class="title col-12" id='painting'>
+        <br>
+          <h3>
+            معرق:
+            
+          </h3>
+        <hr>
+      </div>
+    {% endif %}       
+    {% for product in shop %}
+      {% if product.product_type == 'one'%}
+        {% if product.section == 'mosaic' %}
+          <div class="card m-2" style="width: 18rem;" dir="rtl">
+              <div class="avatarframe">
+                <a href="{%url 'product' product.id%}">
+                  <img src="{{product.artist.avatar.url}}" class="artistavatar "  alt="artist avatar">
+                </a>
+              </div>
+              <div class="mainimage">
+                <img class="card-img-top" src="{{product.pic1.url}}" alt="Card image cap">
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">{{product.name}}</h5>
+                <p class="card-text">آفریننده: {{product.artist}}</p>
+                <p class="card-text des">{{product.des}}</p>
+                
+                <div class="price">
+                  {{product.price}} تومان
+                  
+                </div>
+                <a href="{%url 'product' product.id %}" class="btn btn-primary ">دیدن</a>
+                {%if request.user.is_authenticated%}
+                  <a href="{%url 'product_modify' product.id %}" class="btn btn-success ">ویرایش</a>
+                  <a href="{%url 'product_delete' product.id %}" class="btn btn-danger ">حذف</a>
+                {%endif%}
+              </div>
+          </div>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+    <br><br>
+
+    {% if fasion %}
+      <div class="title col-12" id='painting'>
+        <br>
+          <h3>
+            لباس:
+            
+          </h3>
+        <hr>
+      </div>
+    {% endif %}      
+    {% for product in shop %}
+      {% if product.product_type == 'one'%}
+        {% if product.section == 'fasion' %}
+          <div class="card m-2" style="width: 18rem;" dir="rtl">
+              <div class="avatarframe">
+                <a href="{%url 'product' product.id%}">
+                  <img src="{{product.artist.avatar.url}}" class="artistavatar "  alt="artist avatar">
+                </a>
+              </div>
+              <div class="mainimage">
+                <img class="card-img-top" src="{{product.pic1.url}}" alt="Card image cap">
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">{{product.name}}</h5>
+                <p class="card-text">آفریننده: {{product.artist}}</p>
+                <p class="card-text des">{{product.des}}</p>
+                
+                <div class="price">
+                  {{product.price}} تومان
+                  
+                </div>
+                <a href="{%url 'product' product.id %}" class="btn btn-primary ">دیدن</a>
+                {%if request.user.is_authenticated%}
+                  <a href="{%url 'product_modify' product.id %}" class="btn btn-success ">ویرایش</a>
+                  <a href="{%url 'product_delete' product.id %}" class="btn btn-danger ">حذف</a>
+                {%endif%}
+              </div>
+          </div>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+    <br><br>
+
+    {% if other %}
+      <div class="title col-12" id='painting'>
+        <br>
+          <h3>
+            شاخه های دیگر:
+          </h3>
+        <hr>
+      </div>
+    {% endif %}      
+    {% for product in shop %}
+      {% if product.product_type == 'one'%}
+        {% if product.section == 'other' %}
+          <div class="card m-2" style="width: 18rem;" dir="rtl">
+              <div class="avatarframe">
+                <a href="{%url 'product' product.id%}">
+                  <img src="{{product.artist.avatar.url}}" class="artistavatar "  alt="artist avatar">
+                </a>
+              </div>
+              <div class="mainimage">
+                <img class="card-img-top" src="{{product.pic1.url}}" alt="Card image cap">
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">{{product.name}}</h5>
+                <p class="card-text">آفریننده: {{product.artist}}</p>
+                <p class="card-text des">{{product.des}}</p>
+                
+                <div class="price">
+                  {{product.price}} تومان
+                  
+                </div>
+                <a href="{%url 'product' product.id %}" class="btn btn-primary ">دیدن</a>
+                {%if request.user.is_authenticated%}
+                  <a href="{%url 'product_modify' product.id %}" class="btn btn-success ">ویرایش</a>
+                  <a href="{%url 'product_delete' product.id %}" class="btn btn-danger ">حذف</a>
+                {%endif%}
+              </div>
+          </div>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+    <br><br>
+
+
+
+
+
+      <br><br><br>
+</div>
+
+
+
+{% endblock content %}

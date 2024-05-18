@@ -1,0 +1,78 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+<br><br><br>
+<style>
+  .price{
+    background-color: rgba(0,0,0,0.2);
+    margin-bottom: 10px;
+    display: flex;
+    padding:5px;
+    justify-content: left;
+
+  }
+
+  .card-img-top{
+    position: relative;
+    margin-top: 8px;
+    height :60vh;
+    width:auto;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .des{
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mainimage{
+    position: relative;
+    margin-top: 8px;
+    height :60%;
+    width:auto;
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(100, 63, 4, 0.7);
+    padding:10px;
+  }
+  .card-img-top{
+    width: 100%;
+    height:auto;
+  }
+</style>
+<div class="row col-12 justify-content-center m-0 p-0" >
+    {% if request.user.is_authenticated %}
+      <a href="{%url 'product_add' %}" class="btn btn-success ">افزودن محصول</a>
+    {%endif%}
+    {% for product in shop %}
+      {% if product.product_type == 'two'%}
+        <div class="card m-2" style="width: 18rem;" dir="rtl">
+          <div class="mainimage">
+            <img class="card-img-top" src="{{product.pic1.url}}" alt="Card image cap">
+          </div>
+            
+            <div class="card-body">
+              <h5 class="card-title">{{product.name}}</h5>
+              <p class="des card-text">{{product.des}}</p>
+              <div class="price">
+                {{product.price}} تومان
+              </div>
+              <a href="{%url 'product' product.id %}" class="btn btn-primary ">خرید</a>
+              {%if request.user.is_authenticated%}
+                <a href="{%url 'product_modify' product.id %}" class="btn btn-success ">ویرایش</a>
+                <a href="{%url 'product_delete' product.id %}" class="btn btn-danger ">حذف</a>
+              {%endif%}
+            </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+
+
+
+      <br><br><br>
+</div>
+
+{% endblock content %}

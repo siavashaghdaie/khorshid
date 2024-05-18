@@ -1,0 +1,46 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+<br><br><br><br>
+
+<style>
+    .row{
+        display: grid;
+        padding:0px;
+        margin:0;
+        background-color: rgba(0,0,0,0.1);
+        backdrop-filter: blur(5px);
+    }
+    .thanks{
+        color: wheat;
+        width: 100%;
+
+        margin:0;
+        padding:20px;
+        margin-bottom: 4;
+        border-right:dashed;
+        
+    }
+    h{
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+
+<div class="row">
+    <div class="thanks col-12">
+        <br>
+        <h3>
+            {{buy.order}} عزیز
+        </h3>
+        <br>
+        <h5>
+            از خرید شما سپاسگزاریم
+        </h5>
+        <br>
+    </div>
+</div>
+
+
+<br>
+
+
+{% endblock content %}

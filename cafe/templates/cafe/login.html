@@ -1,0 +1,119 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+
+
+<style>
+    .wrapper{
+        
+        top: 7vh;
+    }
+    .formwrapper{
+        margin:0;
+        
+        background-color: rgba(29, 28, 28,0.3);
+        backdrop-filter: blur(5px);
+        color:wheat;
+        border-radius: 10px;
+        
+    }
+    form{
+        display:grid
+    }
+    label{
+        display: block;
+    }
+    input{
+        display:block;
+        border-radius: 5px;
+        background-color: #5d2a00;
+        width:100%;
+        color: wheat;
+        direction: rtl;
+    }
+    textarea{
+        display:block;
+        border-radius: 5px;
+        background-color: #5d2a00;
+        width:100%;
+        color: wheat;
+        direction: rtl;
+    }
+
+    #id_avatar{
+        
+        color: wheat;
+    }
+    .helptext{
+        display: none;
+    }
+
+    a{
+
+    }
+    
+</style>
+
+{% if page == 'login' %}
+
+<div class="row d-flex justify-content-center m-0 p-0">
+    
+    <div class="formwrapper col-md-4 col-sm-12 pt-5 col-12 pt-5">
+        <div class="col-12 title d-grid justify-content-center">
+            <h2>ورود</h2> 
+        </div>
+        <hr>
+        <form method="POST">
+            {%csrf_token%}
+            <input class="mb-3" type="text" name="username" placeholder="نام کاربری">
+            <input class="mb-3" type="text " name="password" placeholder="کلمه ی عبور">
+            <input class="mb-3" type="submit" value="ورود">
+            
+        </form>
+        <hr>
+        <div class="col-12 d-grid justify-content-center">
+            <a class="btn btn-primary mb-3 mt-3 bg-dark " href="{% url 'register' %}">ثبت نام</a>
+        </div>
+        
+
+    </div> 
+</div>
+{% else %}
+<div class="row d-flex justify-content-center m-0 p-0">
+
+    <div class="formwrapper col-md-4 col-sm-12 pt-5 " dir="rtl">
+        {% if user.is_authenticated %}
+        <div class="col-12 title d-grid justify-content-center">
+        <h3>ویرایش پروفایل</h3> 
+        </div>  
+        {% else %}
+        <div class="col-12 title d-grid justify-content-center">
+            <h3>ثبت نام</h3> 
+        </div>
+            
+        {% endif %}
+        <hr>
+        <form method="POST", enctype="multipart/form-data">
+            {%csrf_token%}
+            {{form.as_p}}
+            <input type="submit" value="ثبت">             
+        </form>
+        <hr>
+        <div class="col-12 d-grid justify-content-center" >
+            {% if user.is_authenticated %}
+                <a class="btn btn-primary mb-3 mt-3 bg-dark " href="{% url 'profiledelete' user.id %}">حذف پروفایل</a> 
+            {% else %}
+                <a class="btn btn-primary mb-3 mt-3 bg-dark " href="{% url 'login' %}">قبلا ثبت نام کرده ام</a> 
+            {% endif %}  
+        </div>
+        
+    
+        
+    </div>
+
+</div>
+
+
+
+
+{% endif %}
+
+{% endblock content %}

@@ -1,0 +1,193 @@
+{% extends 'main.html' %}
+{% load static %} 
+{% block content %}
+<style>
+    .row{
+        margin:0;
+        padding:0;
+        justify-self: center;
+    }
+    .factor{
+        color: wheat;
+        background-color: rgba(0,0,0,0.2);
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        justify-content: center;
+    }
+    .confirm{
+        display: flex;
+        justify-content: left;
+        
+    }
+    .ver{
+        margin:0;
+        padding:0;
+        display: grid;
+        border:dashed;
+    }
+    #verfield{
+        width:100px;
+        height: 50px;
+        font-size: xx-large;
+        align-items: center;
+        justify-self: center;
+        text-align: center;
+    }
+    .title{
+        font-size: large;
+        /* background-color: rgb(54, 23, 4); */
+        display: grid;
+        justify-content: center;
+        padding:10px;
+        color: wheat;
+        margin-bottom: 10px;
+        border-radius: 5px;
+    }
+    a{
+        margin:10px;
+    }
+    form{
+        display: grid;
+        justify-content: center;
+    }
+    .countdown{
+        display: flex;
+        justify-content: center;
+
+    }
+    #retry{
+        display : none;
+    }
+    #title2{
+        display: none;
+    }
+    
+</style>
+
+
+
+<br><br><br>
+<div class="row factor">
+    {% if buy.ver == '0000' %}
+    <div class="title col-8">
+         <h2>فاکتور فروش</h2>
+    </div>
+
+    <div class=" col-8">
+        <br>
+        <h4> محصول: </h4>
+        {{buy.product.name}}
+        <br>
+        <hr>
+        <h4> قیمت: </h4>
+        {{buy.product.price}} تومان
+        <hr>
+        <h4> هزینه ی ارسال: </h4>
+        {% if buy.area == 'one' %}
+        {{buy.product.near_post_price}} تومان
+        {% else %}
+        {{buy.product.far_post_price}} تومان
+        {%endif%}
+        <hr>
+        <h4> سفارش دهنده: </h4>
+        {{buy.order}}
+        <hr>
+        <h4> تلفن همراه: </h4>
+        {{buy.ord_mobile}}
+        <hr>
+        <h4> تاریخ تحویل: </h4>
+        {{buy.rec_date}}
+        <hr>
+        <h4> محدوده: </h4>
+        {%if buy.area == 'one'%}
+            استان تهران یا البرز
+        {%else%}
+            استان ها غیر از تهران یا البرز
+        {%endif%}
+        <hr>
+        <h4> نشانی: </h4>
+        {{buy.address}}
+        <hr>
+   </div>
+   
+
+   <div class="confirm col-8">   
+        <a href="{%url 'modify' buy.id %}" class="btn btn-warning btn-lg" role="button">اصلاح اطلاعات</a>   
+        <a href="{%url 'sms' buy.id %}" class="btn btn-success btn-lg" role="button">تأیید</a>       
+   </div>
+   {%endif%}
+
+   {% if buy.ver != '0000' %}
+        <div class="ver col-8">
+            <div class="title" id='title1'>
+                <h5>
+                    کد پیامک شده را وارد کنید:
+                </h5>
+            </div>
+            <div class="title mt-2" id='title2'>
+                <h2>
+                    زمان شما به پایان رسید
+                </h2>
+            </div>
+            <form action="" method="POST">
+                {%csrf_token%}
+                <input type="text" name='ver' id='verfield'>
+                <input class="btn btn-success btn-lg mt-2 mb-2" id='confirm' type="submit" value="تأیید کد و پرداخت"> 
+            </form>
+
+            <div class="countdown">
+                <p id='countdown'></p>
+            </div>
+
+            <div class="retry col-12 justify-content-center" id='retry'>
+                <a href="{%url 'sms' buy.id %}" class="btn btn-primary m-4 btn-lg" role="button">ارسال مجدد</a>
+                <a href="{%url 'product' buy.product.id %}" class="btn btn-primary m-4 btn-lg" role="button">    بازگشت    </a>  
+            </div>
+            
+        </div>
+        
+    {% endif %}
+
+   
+
+
+    
+</div>
+
+<script>
+    const startingMinute = 2;
+    let time = startingMinute * 60;
+
+    const countdownEl = document.getElementById('countdown');
+    const retry = document.getElementById('retry');
+    const confirm = document.getElementById('confirm')
+    const verfield = document.getElementById('verfield') 
+    const title1 = document.getElementById('title1') 
+    const title2 = document.getElementById('title2')
+    setInterval(updateCountdown, 1000)
+
+    function updateCountdown(){
+        const minutes = Math.floor (time / 60);
+        let seconds = time % 60;
+        countdownEl.innerHTML = 'زمان باقی مانده: ' + minutes +':'+ seconds;
+        time--;
+        if (time == 0) {
+            countdownEl.style.display = 'none';
+            retry.style.display = 'flex'
+            confirm.style.display = 'none'
+            verfield.style.display = 'none'
+            title1.style.display = 'none'
+            title2.style.display = 'flex'
+        }
+
+    }
+    // var counter = 0;
+    // async function timer(){
+    //     counter ++
+    //     console.log(counter)
+    // }
+    // setInterval(timer, 1000)
+</script>
+
+
+{% endblock content %}

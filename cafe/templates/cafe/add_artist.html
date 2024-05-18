@@ -1,0 +1,80 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+<br><br><br>
+
+<style>
+    .wrapper{
+        
+        top: 7vh;
+    }
+
+    .row{
+        margin:0;
+        padding:0;
+    }
+    .formwrapper{
+        margin:0;
+        
+        background-color: rgba(29, 28, 28,0.3);
+        backdrop-filter: blur(5px);
+        color:wheat;
+        border-radius: 10px;
+        
+    }
+    form{
+        display:grid
+    }
+    label{
+        display: block;
+    }
+    input{
+        display:block;
+        border-radius: 5px;
+        background-color: #5d2a00;
+        width:100%;
+        color: wheat;
+        direction: rtl;
+    }
+    textarea{
+        display:block;
+        border-radius: 5px;
+        background-color: #5d2a00;
+        width:100%;
+        color: wheat;
+        direction: rtl;
+    }
+
+    #id_avatar{
+        
+        color: wheat;
+    }
+    .helptext{
+        display: none;
+    }
+
+    #file-upload-button{
+        background-color: royalblue;
+    }
+
+
+</style>
+
+<div class="row">
+      
+    <div class="row d-flex justify-content-center m-0 p-0">
+        <div class="formwrapper col-md-4 col-sm-12 pt-5 " dir="rtl">
+            <div class="col-12 title d-grid justify-content-center">
+            <h3>ثبت نام هنرمند</h3> 
+            </div>  
+            <hr>
+            <form method="POST", enctype="multipart/form-data">
+                {%csrf_token%}
+                {{form.as_p}}
+                <input type="submit" value="ثبت">             
+            </form>         
+        </div>
+    </div>
+
+    
+</div>
+
+{% endblock content %}

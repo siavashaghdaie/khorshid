@@ -1,0 +1,242 @@
+{%load static%}
+{% load jalali_tags %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{%static 'css/main.css'%}" />
+    <link rel="stylesheet" href="{% static 'admin/jquery.ui.datepicker.jalali/themes/base/jquery-ui.min.css' %}">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+
+    <title>کافه خورشید</title>
+
+    <script type="text/javascript">
+
+      function getCookie(name) {
+          let cookieValue = null;
+          if (document.cookie && document.cookie !== '') {
+              const cookies = document.cookie.split(';');
+              for (let i = 0; i < cookies.length; i++) {
+                  const cookie = cookies[i].trim();
+                  // Does this cookie string begin with the name we want?
+                  if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                      break;
+                  }
+              }
+          }
+          return cookieValue;
+      }
+
+      function uuidv4() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+        return v.toString(16);
+        });
+      } 
+
+      let device = getCookie('device')
+
+      if(device == null || device == undefined ){
+        device = uuidv4()
+      }
+      document.cookie = 'device=' + device + ";domain=;path=/"
+    </script>
+
+  </head>
+
+  <style>
+    @font-face {
+      font-family: IRANSansWebFaNum;
+      src: url("{%static 'cafe/fonts/IRANSansWebFaNum.ttf'%}");
+    }
+    * {
+      font-family: IRANSansWebFaNum;
+    }
+    body{
+    height:100vh;
+    margin:0;
+    padding:0;
+    background-color: #361800;
+    }
+    
+
+  </style>
+
+  <body>
+
+    <div class="container d-grid " id="container" >
+      <div class="fixed">
+        <img class="wallpaper1" src="{%static 'images/cofee-seed-2.png'%}" alt="cafe wallpaper">
+        <div class="scroll-gif">
+          <img class="go-down" src="{%static 'images/go-down-4.gif'%}" alt="cafe wallpaper">
+        </div>
+      </div>
+
+
+      <nav class="navbar navbar-custom navbar-expand-lg navbar-dark" id="navbar">
+        <div class="container-fluid">
+          <!-- <a class="navbar-brand" style="color:rgb(214, 190, 176)" href="#"> ورود</a> -->
+          {% if request.user.is_authenticated %}
+            <a class="btn btn-primary mb-1 mt-1 d-none d-lg-block " href="{%url 'logout'%}" role="button">
+              خروج 
+            </a>
+          {% else %}
+            <a class="btn btn-primary mb-1 mt-1 d-none d-md-block " href="{%url 'login'%}" role="button">
+              ورود 
+            </a>
+          {% endif %}
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            {% if request.user.is_authenticated %}
+              <!-- <a class="nav-link active" style="color: wheat" aria-current="page" href="{%url 'profile' user.id%}">پروفایل</a> -->
+              <a href="{%url 'profile' user.id%}">
+                <img src="{{user.avatar.url}}" class="avatar d-none d-md-block  " alt="user avatar">
+              </a>
+              
+            {% endif %}
+            
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 " style="direction: rtl;"  >
+
+              <!-- {% if request.user.is_authenticated %}
+                <li class="nav-item d-md-none d-flext" style="left:0">
+                  <a class="nav-link active" style="color: wheat" aria-current="page" href="{%url 'profile' user.id%}">پروفایل</a>
+                  <a href="{%url 'profile' user.id%}">
+                    <img src="{{user.avatar.url}}" class="avatar " alt="user avatar">
+                  </a>
+                </li>
+              {% endif %} -->
+
+              <li class="nav-item d-md-none">
+                {% if request.user.is_authenticated %}
+                  <a class="nav-link active" style="color: wheat" aria-current="page" href="{%url 'logout'%}">خروج</a>
+                  
+                {% else %}
+                  <a class="nav-link active" style="color: wheat" aria-current="page" href="{%url 'login'%}">ورود</a>
+                {% endif %}
+                
+              </li>
+              
+              <li class="nav-item">
+                <a class="nav-link active" style="color: wheat" aria-current="page" href="{%url 'menu'%}">منو</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" style="color: wheat" href="{%url 'shop'%}">فروشگاه</a>
+              </li>
+              {% comment %} <li class="nav-item">
+                <a class="nav-link" style="color: wheat" href="{%url 'mafia'%}">مافیا</a>
+              </li> {% endcomment %}
+              <li class="nav-item">
+                <a class="nav-link" style="color: wheat" href="{%url 'gallery'%}">گالری</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" style="color: wheat" href="{%url 'events'%}">رویدادها</a>
+              </li>
+              {% comment %} <li class="nav-item">
+                <a class="nav-link" style="color: wheat" href="{%url 'social'%}">شبکه‌ی اجتماعی</a>
+              </li> {% endcomment %}
+
+              <li class="nav-item">
+                <a class="nav-link" style="color: wheat" href="{%url 'contact'%}">تماس با ما</a>
+              </li>
+
+            </ul>
+            
+            <!-- <form class="d-flex">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form> -->
+          </div>
+          <a href="{% url 'index' %}">
+            <img src="{% static 'images/sun2.png'%}" class="img-thumbnail bg-dark" style="width:5vh" alt="sun">
+          </a>
+          
+        </div>
+        
+      </nav>
+
+      <div class="wrapper row" id="wrapper" dir='rtl'>
+      {% if request.user.is_authenticated %}
+          <!-- <a class="nav-link active" style="color: wheat" aria-current="page" href="{%url 'profile' user.id%}">پروفایل</a> -->
+          <a href="{%url 'profile' user.id%}">
+            <img src="{{user.avatar.url}}" class="mobileavatar d-lg-none "  alt="user avatar">
+          </a>
+      {% endif %}
+
+      {% block content %}
+
+      {% endblock content %}
+
+        <!--Address & Contact-->
+        <div class="row caption">
+          <div class="col-12 d-flex justify-content-center mb-3">
+            <h1>
+            نشانی   
+            </h1>
+          </div>
+
+          <div class="col-md-12 col-sm-12 d-grid justify-content-center">
+            <iframe src="https://balad.ir/embed?p=5q8E5CdTkGxTNW" 
+              class="map mb-3"
+              title="مشاهده «کافه کتاب خورشید» روی نقشه بلد" 
+              width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" 
+              tabindex="0">
+            </iframe>
+          </div>
+
+          <div class="col-md-12 col-sm-12 d-grid justify-content-center" dir="rtl">
+            <p>
+              کرج، عظیمیه، ندای شمالی، بوستان سوم
+            </p>
+            <a class="btn btn-primary mb-3 btn-lg " href="{%url 'contact'%}" role="button">
+              تماس با ما
+            </a>
+          </div>
+          <hr>
+
+        </div>
+
+        <div class="footer-wrapper row m-0 p-0 d-flex ">
+          <div class="footer m-0 p-0">
+            <img class="" src="{%static 'images/footer01.png'%}" alt="cafe wallpaper">
+
+          </div>
+          
+          <!-- <div class="col-4 footer-cup m-0 MT-3">
+            <img class="" src="{%static 'images/cup-heart.png'%}" alt="cafe wallpaper">
+          </div> -->
+
+          <div class="col-4 footer-contact MT-3 " >
+            <img class="socail" src="{%static 'images/insta.png'%}" alt="cafe wallpaper">
+          </div>
+
+          <div class="col-4 footer-contact MT-3 " >
+            <img class="socail" src="{%static 'images/whatsapp.png'%}" alt="cafe wallpaper">
+          </div>
+
+          <div class="col-4 footer-contact MT-3 " >
+            <img class="socail" src="{%static 'images/twitter.png'%}" alt="cafe wallpaper">
+          </div>
+          
+        </div>
+      </div>
+      
+    </div>
+
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"></script>
+      <script src="{% static 'admin/js/django_jalali.min.js' %}"></script>
+  </body>
+</html>

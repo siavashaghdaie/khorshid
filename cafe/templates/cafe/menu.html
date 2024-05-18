@@ -1,0 +1,247 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+<br><br><br>
+<style>
+  .price{
+    background-color: rgba(0,0,0,0.2);
+    margin-bottom: 10px;
+    display: flex;
+    padding:5px;
+    justify-content: left;
+    border-radius: 5px;
+
+  }
+
+  .title{
+    background-color: rgba(0,0,0,0.2);
+    backdrop-filter: blur(5px);
+    margin:0;
+    padding:20px;
+    color:wheat;
+  }
+
+  .avatarframe{
+    position:absolute;
+    display: flex;
+    justify-content: center;
+    background-color: rgba(102, 67, 11, 0.8);
+    backdrop-filter: blur(5px);
+    height:12%;
+    width:25%;
+    overflow: hidden;
+    margin:0;
+    margin-left:20px;
+    top:0%;
+    left:7%;
+    z-index: 1;
+    border-radius: 0 0 50% 50%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0
+  }
+  .artistavatar{
+    position: relative;
+    height:100%;
+    z-index: 1;
+  }
+
+  .mainimage{
+    position: relative;
+    margin-top: 8px;
+    height :60%;
+    width:auto;
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(100, 63, 4, 0.7);
+    padding:10px;
+  }
+  .card-img-top{
+    width: 100%;
+    height:auto;
+  }
+
+  .des{
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ellipsis:after{
+    content:'...';
+  }
+
+  #factor{
+      position: fixed;
+      z-index: 20;
+      bottom:10px;
+      height:70px;
+      justify-content: center;
+      align-items: center;
+      font-size: xx-large;
+  }
+
+  .product-name{
+      display: none;
+  }
+ 
+  .form{
+      position: relative;
+      display: flex;
+      justify-content: right;
+      background-color: rgba(0,0,0,0.2);
+      border-radius: 5px;
+  }
+
+  .buy{
+      width: 100%;
+  }
+
+  .order_qty{
+    position:absolute;
+    font-size: xxx-large;
+    background-color: cornflowerblue;
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    left:30px;
+    border-radius: 0 0 10px 10px;
+    color: rgb(34, 27, 110);
+  }
+
+  span{
+    margin:0;
+    padding:0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+
+</style>
+
+
+<div class="row col-12 justify-content-center m-0 p-0" >
+    {% if request.user.is_authenticated %}
+    <a href="{%url 'artist_add' %}" class="btn btn-success ">افزودن هنرمند</a>
+    <hr>
+    <a href="{%url 'artwork_add' %}" class="btn btn-success ">افزودن اثر</a>
+    {% endif %}
+
+    <a href="{%url 'artwork_add' %}" class="btn btn-success " id="factor">تأیید فاکتور</a>
+
+    
+    {% for cat in cats %}
+    <div class="title col-12" id='painting'>
+        <br>
+          <h3>
+            {{cat.cat}}
+          </h3>
+        <hr>
+    </div>
+
+    {% for item in items %}
+        {% if item.cat.cat == cat.cat %}
+        <div class="card m-2" style="width: 18rem;" dir="rtl">
+            <div class="mainimage">
+              <img class="card-img-top" src="{{item.pic1.url}}" alt="Card image cap">
+            </div>
+            <div class="order_qty">
+              {% for order_item in order_items %}
+              {% if order_item.order == order %}
+              {% if order_item.order.complete == False %}
+              {% if order_item.menu_item == item %}
+              {{order_item.quantity}}
+              {% endif %}
+              {% endif %}
+              {% endif %}
+              {%endfor%}
+            </div>
+              
+              <div class="card-body">
+                <h5 class="card-title">{{item.name}}</h5>
+                <p class="des card-text">{{item.des}}</p>
+                <div class="price">
+                  {{item.price}} تومان
+                </div>
+                
+                <div class="buy col-md-3">
+                  
+                  <!-- Button trigger modal -->
+                  <button type="button" class="btn btn-primary buy m-1" data-bs-toggle="modal" data-bs-target="#{{item.name}}">
+                   خرید
+                  </button>
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="{{item.name}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="{{item.name}}Label">ثبت یا ویرایش سفارش</h5>
+                          <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                        </div>
+                        <div class="modal-body">
+                          <form method="POST" action="" class="form">
+                            {%csrf_token%}
+
+
+                            {% if item.name in orders %}
+                              {% for order_item in order_items %}
+                              {% if order_item.order == order %}
+                              {% if order_item.order.complete == False %}
+                              {% if order_item.menu_item == item %}
+                              <input type="number" value="{{order_item.quantity}}" min="0" max="30" name='qty' class="qty m-1">
+                              {% endif %}
+                              {% endif %}
+                              {% endif %}
+                              {%endfor%}
+                            {%else%}
+                              <input type="number" value="0" min="0" max="30" name="qty" class="qty m-1">
+                            {% endif %}
+
+                            
+                            
+                            <p id="orderqty"></p>
+                            <script>
+                              if (x == 0){
+                                  document.getElementById('orderqty').innerHTML = ''
+                              }
+                              
+                            </script>
+           
+                            <!-- <input type="number" value="{{order_item.quantity}}" min="0" max="30" name='qty' class="qty m-1"> -->
+                            <input type="text" value="{{item.name}}" min="0" max="20" name='item' class="product-name" > 
+                            <input type="submit" value="خرید" class="btn btn-primary buy m-1">              
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">لغو</button>
+                          <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                    
+                    
+                </div>
+                
+                {%if request.user.is_authenticated%}
+                    <hr>
+                    <a href="{%url 'product_modify' item.id %}" class="btn btn-success ">ویرایش</a>
+                    <a href="{%url 'product_delete' item.id %}" class="btn btn-danger ">حذف</a>
+                {%endif%}
+              </div>
+        </div>
+
+            
+        {% endif %}
+    
+    {% endfor %}
+
+
+    {% endfor %}
+
+</div>
+
+
+
+{% endblock content %}
